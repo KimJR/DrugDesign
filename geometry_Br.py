@@ -3,8 +3,6 @@ from functions import selectHalogen
 from functions import moveOrigin
 from functions import getCoords
 from functions import rotateZ
-from functions import rotateY
-from functions import rotateX
 from functions import move
 from pymol import cmd
 
