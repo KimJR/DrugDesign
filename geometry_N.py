@@ -18,9 +18,7 @@ cmd.load("ibenz.mol2")
 selectHalogen()
 #-------- move in Origin-----------
 moveOrigin("Halogen","ibenz")
-print(getCoords("Halogen"))
-
-
+#-------- rotate-----------
 rotateY("current_neighbor","Halogen","ibenz")
 print("nach 1. Drehen: "+str(getCoords("current_neighbor")))
 rotateZ("current_neighbor","Halogen","ibenz")
