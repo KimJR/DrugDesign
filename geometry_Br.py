@@ -3,6 +3,8 @@ from functions import selectHalogen
 from functions import moveOrigin
 from functions import getCoords
 from functions import rotateZ
+from functions import rotateY
+from functions import rotateX
 from functions import move
 from pymol import cmd
 
@@ -25,13 +27,11 @@ print("Nitrogen: "+str(getCoords("nitrogen_N")))
 #---------------------------------------------
 #           rotate
 #---------------------------------------------
-#rotateZ("current_neighbor","Halogen","ibenz")
-#print("atom2: "+str(getCoords("current_neighbor")))
-#print("atom1: "+str(getCoords("Halogen")))
-#rotateY("second_atom","current_halogen","ibenz")
-#rotateX("second_atom","current_neighbor","ibenz")
-#print("atom2: "+str(getCoords("current_neighbor")))
-#print("atom1: "+str(getCoords("second_atom")))
+print("before rotation: "+str(getCoords("current_neighbor")))
+rotateY("current_neighbor","Halogen","ibenz")
+print("after 1. rotation: "+str(getCoords("current_neighbor")))
+rotateZ("current_neighbor","Halogen","ibenz")
+print("after 2. rotation: "+str(getCoords("current_neighbor")))
 #moveInZMinus("nitrogen_NH","nitrogen_N","imidazol")
 #moveInXAxis("newC","nitrogen_N","imidazol")
 #---------------------------------------------
