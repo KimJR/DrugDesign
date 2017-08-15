@@ -43,7 +43,10 @@ def rotateZ(AtomName1,AtomName2,FileName):
     cmd.pseudoatom("pseudoY", pos=[0,1,0])
     cmd.color("hotpink", "pseudoY")
     angleZ = cmd.get_angle(AtomName1,AtomName2,"pseudoY",0)
-    cmd.rotate("z", angleZ,FileName,0,1,None,"0,0,0")
+
+
+
+    
     return(angleZ)
 
 #-------- rotate y axis --------
