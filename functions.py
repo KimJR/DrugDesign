@@ -38,18 +38,19 @@ def moveOrigin(AtomName,FileName):
     NewCoords = getCoords(AtomName)
     cmd.translate([NewCoords[0]*(-1), NewCoords[1]*(-1), NewCoords[2]*(-1)],FileName)
 
-#-------- rotate z axis --------
+#-------- rotate Z axis --------
 def rotateZ(AtomName1,AtomName2,FileName):
     cmd.pseudoatom("pseudoY", pos=[0,1,0])
     cmd.color("hotpink", "pseudoY")
     angleZ = cmd.get_angle(AtomName1,AtomName2,"pseudoY",0)
-
-
-
-    
+    rotMat=[ math.cos(angleZ),-math.sin(angleZ),0,0,
+             math.sin(angleZ),math.cos(angleZ),0,0,
+             0,0,1,0,
+             0,0,0,1]
+    cmd.transform_selection(FileName, rotMat, homogenous=0)
     return(angleZ)
 
-#-------- rotate y axis --------
+#-------- rotate Y axis --------
 def rotateY(AtomName1,AtomName2,FileName):
     cmd.pseudoatom("pseudoX", pos=[1,0,0])
     cmd.color("yellow", "pseudoX")
