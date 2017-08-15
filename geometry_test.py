@@ -8,6 +8,7 @@ from functions import selectHalogen
 from functions import move
 
 from pymol import cmd
+
 cmd.reinitialize()
 
 

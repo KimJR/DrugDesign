@@ -1,5 +1,6 @@
 import math
 from pymol import cmd
+from pymol import math
 
 #------Load File------------------
 def loadFile(FileName):
@@ -56,11 +57,10 @@ def rotateY(AtomName1,AtomName2,FileName):
     cmd.pseudoatom("pseudoX", pos=[1,0,0])
     cmd.color("yellow", "pseudoX")
     angleY = cmd.get_angle(AtomName1,AtomName2,"pseudoX",0)
-    rotMat=[ math.cos(angleY),0,math.sin(angleY),0,
-             0,1,0,0,
-             -math.sin(angleY),0,math.cos(angleY),0,
-             0,0,0,1]
-    cmd.transform_selection(FileName, rotMat, homogenous=0)
+    rotMat=[math.cos(angleY),0,math.sin(angleY),0,0,1,0,0,
+    -math.sin(angleY),0,math.cos(angleY),0,
+    0,0,0,1]
+    cmd.transform_selection(FileName,rotMat, homogenous=0)
     return(angleY)
 
 def rotateX(AtomName1,AtomName2,FileName):
