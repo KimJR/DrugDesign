@@ -22,5 +22,5 @@ moveOrigin("Halogen","ibenz")
 #-------- rotate-----------
 rotateY("current_neighbor","Halogen","ibenz")
 print("nach 1. Drehen: "+str(getCoords("current_neighbor")))
-rotateZ("current_neighbor","Halogen","ibenz")
+#rotateZ("current_neighbor","Halogen","ibenz")
 print("nach 2. Drehen: "+str(getCoords("current_neighbor")))
