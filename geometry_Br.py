@@ -5,8 +5,6 @@ from functions import getCoords
 from functions import rotateZ
 from functions import rotateY
 from functions import rotateX
-#from functions import moveInZMinus
-#from functions import moveInXAxis
 from functions import move
 from pymol import cmd
 
