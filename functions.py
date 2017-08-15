@@ -55,7 +55,7 @@ def rotateY(AtomName1,AtomName2,FileName):
     cmd.pseudoatom("pseudoX", pos=[1,0,0])
     cmd.color("yellow", "pseudoX")
     angleY = cmd.get_angle(AtomName1,AtomName2,"pseudoX",0)
-    crotMat=[ math.cos(angleY),0,math.sin(angleY),0,
+    rotMat=[ math.cos(angleY),0,math.sin(angleY),0,
              0,1,0,0,
              -math.sin(angleY),0,math.cos(angleY),0,
              0,0,0,1]
@@ -77,8 +77,6 @@ def moveInXAxis (atomName1,atomName2,FileName):
     #cmd.color("white","pseudoX")
         angleX = cmd.get_angle(atomName1,atomName2,"pseudoX",0)
         cmd.rotate("z", angleX,FileName,0,1,None,"0,0,0")
-
-
 
 #-------Move on x-y-z-axis------------------
 def move(FileName,AtomName,x,y,z):
