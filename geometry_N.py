@@ -52,16 +52,3 @@ print("nach Drehen: "+str(getCoords("current_neighbor")))
 #          0,0,0,1]
 #cmd.transform_selection("ibenz", rotMat2, homogenous=0)
 #print(getCoords("second_atom"))
-
-
-
-
-
-#rotateZ("current_neighbor","current_halogen","ibenz")
-#print("atom2: "+str(getCoords("current_neighbor")))
-#print("atom1: "+str(getCoords("current_halogen")))
-
-#rotateY("second_atom","current_halogen","ibenz")
-#rotateX("second_atom","current_neighbor","ibenz")
-#print("atom2: "+str(getCoords("current_neighbor")))
-#print("atom1: "+str(getCoords("second_atom")))
