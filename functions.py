@@ -89,7 +89,7 @@ def rotateMatrixY(FileName, alpha):
 
 #-------- rotateMatrix X axis --------
 def rotateMatrixX(FileName,alpha):
-    crotMat=[ 1,0,0,0,
+    rotMat=[ 1,0,0,0,
              0,math.cos(alpha),-math.sin(alpha),0,
              0,math.sin(alpha),math.cos(alpha),0,
              0,0,0,1]
@@ -106,12 +106,15 @@ def moveInXAxis (atomName1,atomName2,FileName):
     cmd.color("white","pseudoX")
     angleX = cmd.get_angle(atomName1,atomName2,"pseudoX",0)
     cmd.rotate("z", angleX,FileName,0,1,None,"0,0,0")
+<<<<<<< HEAD
+=======
 
 
 #---------------------------------------------
 #           create grid
 #---------------------------------------------
 
+>>>>>>> 49543d7d771c9bd15ea556367c8ba7ee2216cd34
 #-------Move on x-y-z-axis------------------
 def move(FileName,AtomName,x,y,z):
     NewCoords = getCoords(AtomName)
