@@ -53,7 +53,7 @@ def moveOrigin(AtomName,FileName):
 def orientate():
     moveOrigin("Halogen","ibenz")
     alpha=angleY()
-    rotateMatrixY("ibenz",180-alpha)
+    rotateMatrixY("ibenz",alpha)
 
 
 #-------- calculate angle for Y --------
@@ -63,6 +63,9 @@ def angleY():
     cmd.pseudoatom("pseudoX", pos=[1,0,0])
     cmd.color("yellow", "pseudoX")
     angleY = cmd.get_angle("pseudo","Halogen","pseudoX",0)
+
+    if co[3]<0:
+        return(180-angleY)
     return(angleY)
 
 #-------- rotateMatrix for Z axis --------
