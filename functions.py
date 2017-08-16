@@ -50,12 +50,20 @@ def moveOrigin(AtomName,FileName):
 #---------------------------------------------
 #           orientate Halogen
 #---------------------------------------------
+def orientate():
+    moveOrigin("Halogen","ibenz")
+    alpha=angleY()
+    rotateMatrixY("ibenz",180-alpha)
 
-#def orientate(AtomName1):
-    #first rotation y-axis with 2.atom
-    #getCoords(Atomname1)
-    #if
 
+#-------- calculate angle for Y --------
+def angleY():
+    co=getCoords("current_neighbor")
+    cmd.pseudoatom("pseudo", pos=[co[0],0,co[2]])
+    cmd.pseudoatom("pseudoX", pos=[1,0,0])
+    cmd.color("yellow", "pseudoX")
+    angleY = cmd.get_angle("pseudo","Halogen","pseudoX",0)
+    return(angleY)
 
 #-------- rotateMatrix for Z axis --------
 def rotateMatrixZ(FileName,alpha):
@@ -91,7 +99,6 @@ def rotateMatrixX(FileName,alpha):
 #---------------------------------------------
 #-------- rotate X axis --------
 def moveInXAxis (atomName1,atomName2,FileName):
-<<<<<<< HEAD
     cmd.pseudoatom("pseudoX", pos=[1,0,0])
     cmd.color("white","pseudoX")
     angleX = cmd.get_angle(atomName1,atomName2,"pseudoX",0)
@@ -102,12 +109,6 @@ def moveInXAxis (atomName1,atomName2,FileName):
 #           create grid
 #---------------------------------------------
 
-=======
-    #cmd.pseudoatom("pseudoX", pos=[1,0,0])
-    #cmd.color("white","pseudoX")
-        angleX = cmd.get_angle(atomName1,atomName2,"pseudoX",0)
-        cmd.rotate("z", angleX,FileName,0,1,None,"0,0,0")
->>>>>>> 965325e1c8c616d53940654c5a967d566c5c6205
 #-------Move on x-y-z-axis------------------
 def move(FileName,AtomName,x,y,z):
     NewCoords = getCoords(AtomName)
