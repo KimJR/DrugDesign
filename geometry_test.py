@@ -57,3 +57,11 @@ print getCoords("current_neighbor")
 #print ang
 #print  "co1: "+str(co1)
 #print "co2: "+str(co2)
+#-------- move in Origin and orientate-----------
+orientate()
+#print("nach 1. Drehen: "+str(getCoords("current_neighbor")))
+#rotateMatrixZ("ibenz",69.799999999)
+#print("nach 2. Drehen: "+str(getCoords("current_neighbor")))
+#-------- rotate second atom-----------
+#rotateMatrixY("ibenz",41.82)
+#print("nach 3. Drehen: "+str(getCoords("second_atom")))
