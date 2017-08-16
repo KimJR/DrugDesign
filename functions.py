@@ -77,9 +77,6 @@ def moveInXAxis (atomName1,atomName2,FileName):
     #cmd.color("white","pseudoX")
         angleX = cmd.get_angle(atomName1,atomName2,"pseudoX",0)
         cmd.rotate("z", angleX,FileName,0,1,None,"0,0,0")
-
-
-
 #-------Move on x-y-z-axis------------------
 def move(FileName,AtomName,x,y,z):
     NewCoords = getCoords(AtomName)
