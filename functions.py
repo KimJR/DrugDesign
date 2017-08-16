@@ -6,6 +6,10 @@ def loadFile(FileName):
     cmd.reinitialize()
     cmd.load(FileName)
 
+#---------------------------------------------
+#           selections
+#---------------------------------------------
+
 #-----select Nitrogen ring---------
 def selectNitrogen():
     cmd.select ("Nitrogen", "e. N",1)
@@ -24,6 +28,9 @@ def selectHalogen():
     for atom in model_neighbor.atom:
         cmd.select("second_atom", "id %s and ibenz"%(atom.id))
 
+#---------------------------------------------
+#           orientate
+#---------------------------------------------
 
 #------get Coords from Atoms--------
 def getCoords(AtomName):
@@ -39,46 +46,60 @@ def moveOrigin(AtomName,FileName):
     NewCoords = getCoords(AtomName)
     cmd.translate([NewCoords[0]*(-1), NewCoords[1]*(-1), NewCoords[2]*(-1)],FileName)
 
-#-------- rotate Z axis --------
-def rotateZ(AtomName1,AtomName2,FileName):
-    cmd.pseudoatom("pseudoY", pos=[0,1,0])
-    cmd.color("hotpink", "pseudoY")
-    angleZ = cmd.get_angle(AtomName1,AtomName2,"pseudoY",0)
-    rotMat=[ math.cos(angleZ),-math.sin(angleZ),0,0,
-             math.sin(angleZ),math.cos(angleZ),0,0,
+
+#---------------------------------------------
+#           orientate Halogen
+#---------------------------------------------
+
+#def orientate(AtomName1):
+    #first rotation y-axis with 2.atom
+    #getCoords(Atomname1)
+    #if
+
+
+#-------- rotateMatrix for Z axis --------
+def rotateMatrixZ(FileName,alpha):
+    rotMat=[ math.cos(alpha),-math.sin(alpha),0,0,
+             math.sin(alpha),math.cos(alpha),0,0,
              0,0,1,0,
              0,0,0,1]
     cmd.transform_selection(FileName, rotMat, homogenous=0)
-    return(angleZ)
 
-#-------- rotate Y axis --------
-def rotateY(AtomName1,AtomName2,FileName):
-    cmd.pseudoatom("pseudoX", pos=[1,0,0])
-    cmd.color("yellow", "pseudoX")
-    angleY = cmd.get_angle(AtomName1,AtomName2,"pseudoX",0)
-    rotMat=[math.cos(angleY),0,math.sin(angleY),0,0,1,0,0,
-    -math.sin(angleY),0,math.cos(angleY),0,
+#-------- rotateMatrix for Y axis --------
+def rotateMatrixY(FileName, alpha):
+    #cmd.pseudoatom("pseudoX", pos=[1,0,0])
+    #color("yellow", "pseudoX")
+    #angleY = cmd.get_angle(AtomName1,AtomName2,"pseudoX",0)
+    rotMat=[math.cos(alpha),0,math.sin(alpha),0,0,1,0,0,
+    -math.sin(alpha),0,math.cos(alpha),0,
     0,0,0,1]
     cmd.transform_selection(FileName,rotMat, homogenous=0)
-    return(angleY)
 
-def rotateX(AtomName1,AtomName2,FileName):
-    cmd.pseudoatom("pseudoZ", pos=[0,0,1])
-    angleX = cmd.get_angle(AtomName1,AtomName2,"pseudoZ",0)
+
+#-------- rotateMatrix X axis --------
+def rotateMatrixX(FileName,alpha):
     crotMat=[ 1,0,0,0,
-             0,math.cos(angleX),-math.sin(angleX),0,
-             0,math.sin(angleX),math.cos(angleX),0,
+             0,math.cos(alpha),-math.sin(alpha),0,
+             0,math.sin(alpha),math.cos(alpha),0,
              0,0,0,1]
     cmd.transform_selection(FileName, rotMat, homogenous=0)
-    return(angleX)
 
+
+
+#---------------------------------------------
+#           orientate Nitrogen
+#---------------------------------------------
+#-------- rotate X axis --------
 def moveInXAxis (atomName1,atomName2,FileName):
-    #cmd.pseudoatom("pseudoX", pos=[1,0,0])
-    #cmd.color("white","pseudoX")
-        angleX = cmd.get_angle(atomName1,atomName2,"pseudoX",0)
-        cmd.rotate("z", angleX,FileName,0,1,None,"0,0,0")
+    cmd.pseudoatom("pseudoX", pos=[1,0,0])
+    cmd.color("white","pseudoX")
+    angleX = cmd.get_angle(atomName1,atomName2,"pseudoX",0)
+    cmd.rotate("z", angleX,FileName,0,1,None,"0,0,0")
 
 
+#---------------------------------------------
+#           create grid
+#---------------------------------------------
 
 #-------Move on x-y-z-axis------------------
 def move(FileName,AtomName,x,y,z):

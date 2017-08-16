@@ -1,11 +1,4 @@
-from functions import selectNitrogen
-from functions import selectHalogen
-from functions import moveOrigin
-from functions import getCoords
-from functions import rotateZ
-from functions import rotateY
-from functions import rotateX
-from functions import move
+from functions import *
 from pymol import cmd
 
 cmd.reinitialize()
@@ -16,7 +9,7 @@ cmd.reinitialize()
 cmd.load("imidazol.mol2")
 selectNitrogen()
 cmd.load("ibenz.mol2")
-selectHalogen()
+selectHalogen()For
 #---------------------------------------------
 #           move to origin
 #---------------------------------------------
