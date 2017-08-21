@@ -1,6 +1,18 @@
 from pymol import cmd
 from pymol import math
 
+#---------------------------------------------
+#           variablen
+#---------------------------------------------
+def pseudoAtoms():
+    cmd.pseudoatom("pseudoX", pos=[1,0,0])
+    cmd.pseudoatom("pseudoY", pos=[0,1,0])
+    cmd.pseudoatom("pseudoZ", pos=[0,0,1])
+    cmd.pseudoatom("oreo", pos=[0,0,0])
+    cmd.color("pink", "pseudoX")
+    cmd.color("pink", "pseudoY")
+    cmd.color("pink", "pseudoZ")
+
 #------Load File------------------
 def loadFile(FileName):
     cmd.reinitialize()
@@ -46,63 +58,74 @@ def moveOrigin(AtomName,FileName):
     NewCoords = getCoords(AtomName)
     cmd.translate([NewCoords[0]*(-1), NewCoords[1]*(-1), NewCoords[2]*(-1)],FileName)
 
-
 #---------------------------------------------
 #           orientate Halogen
 #---------------------------------------------
-def orientate():
-    moveOrigin("Halogen","ibenz")
-    alpha=angleY()
-    rotateMatrixY("ibenz",alpha)
+def orientateHalogen(FileName):
+    selectHalogen()
+    moveOrigin("Halogen",FileName)
+    rotateY(FileName,angleY("current_neighbor","pseudoX"),"current_neighbor")
+    rotateZ(FileName,angleZ("current_neighbor","pseudoY"),"current_neighbor")
+    rotateY(FileName,angleY("second_atom","pseudoX"),"second_atom")
+#---------------------------------------------
+#           orientate Nitrogen
+#---------------------------------------------
+def orientateNitrogen(FileName):
+    selectNitrogen()
+    moveOrigin("nitrogen_N",FileName)
+    rotateY(FileName,angleY("nitrogen_NH","pseudoZ"),"nitrogen_NH")
+    rotateX(FileName,angleX("nitrogen_NH"),"nitrogen_NH")
+    rotateZ(FileName,angleZ("newC","pseudoX"),"newC")
+
+#---------------------------------------------
+#           calculate angle
+#---------------------------------------------
+#-------- calculate angle for Y rotation -----
+def angleY(MoleculeName,axis):
+    co=getCoords(MoleculeName)
+    name = "pseudo_%s"%(MoleculeName)
+    cmd.pseudoatom(name, pos=[co[0],0,co[2]])
+    angleY=cmd.get_angle(name,"oreo",axis,0)
+    if co[2]<0:
+        return(-angleY)
+    else:
+        return(angleY)
 
 
-#-------- calculate angle for Y --------
-def angleY():
-    co=getCoords("current_neighbor")
-    cmd.pseudoatom("pseudo", pos=[co[0],0,co[2]])
-    cmd.pseudoatom("pseudoX", pos=[1,0,0])
-    cmd.color("yellow", "pseudoX")
-    angleY = cmd.get_angle("pseudo","Halogen","pseudoX",0)
+    return(cmd.get_angle(name,"oreo",axis,0))
 
-    if co[3]<0:
-        return(180-angleY)
-    return(angleY)
+#-------- calculate angle for Z rotation ------
+def angleZ(MoleculeName,axis):
+    angleZ = cmd.get_angle(MoleculeName,"oreo",axis,0)
+    return(angleZ)
 
+#-------- calculate angle for X rotation --------
+def angleX(MoleculeName):
+    co=getCoords(MoleculeName)
+    angleX = cmd.get_angle(MoleculeName,"oreo","pseudoZ",0)
+    if co[1]<0:
+        return(-angleX)
+    else:
+        return(angleX)
 
-#-------- rotateMatrix for Z axis -------
-def rotateY(FileName,angle):
-    cmd.rotate("y",angle,FileName,0,1,None)
+#---------------------------------------------
+#           rotate on axis
+#---------------------------------------------
+#--------rotate on y axis -------
+def rotateY(FileName,angle,MoleculeName):
+    cmd.rotate("y",angle,FileName,0,1,None,"0,0,0")
 
+#-------- rotate for x axis -------
+def rotateX(FileName,angle,MoleculeName):
+    cmd.rotate("x",angle,FileName,0,1,None,"0,0,0")
 
-
-
-def rotateMatrixZ(FileName,alpha):
-    rotMat=[ math.cos(alpha),-math.sin(alpha),0,0,
-             math.sin(alpha),math.cos(alpha),0,0,
-             0,0,1,0,
-             0,0,0,1]
-    cmd.transform_selection(FileName, rotMat, homogenous=0)
-
-#-------- rotateMatrix for Y axis --------
-def rotateMatrixY(FileName, alpha):
-    #cmd.pseudoatom("pseudoX", pos=[1,0,0])
-    #color("yellow", "pseudoX")
-    #angleY = cmd.get_angle(AtomName1,AtomName2,"pseudoX",0)
-    rotMat=[math.cos(alpha),0,math.sin(alpha),0,0,1,0,0,
-    -math.sin(alpha),0,math.cos(alpha),0,
-    0,0,0,1]
-    cmd.transform_selection(FileName,rotMat, homogenous=0)
-
-
-#-------- rotateMatrix X axis --------
-def rotateMatrixX(FileName,alpha):
-    rotMat=[ 1,0,0,0,
-             0,math.cos(alpha),-math.sin(alpha),0,
-             0,math.sin(alpha),math.cos(alpha),0,
-             0,0,0,1]
-    cmd.transform_selection(FileName, rotMat, homogenous=0)
-
-
+#-------- rotate for y axis -------
+def rotateZ(FileName,angle,MoleculeName):
+    co=getCoords(MoleculeName)
+    if co[0]<0:
+        cmd.rotate("z", -angle,FileName,0,1,None,"0,0,0")
+    else:
+        cmd.rotate("z", angle,FileName,0,1,None,"0,0,0")
 
 #---------------------------------------------
 #           orientate Nitrogen
