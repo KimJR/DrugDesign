@@ -120,8 +120,15 @@ def moveInXAxis (atomName1,atomName2,FileName):
 #           create grid
 #---------------------------------------------
 
->>>>>>> 49543d7d771c9bd15ea556367c8ba7ee2216cd34
 #-------Move on x-y-z-axis------------------
 def move(FileName,AtomName,x,y,z):
     NewCoords = getCoords(AtomName)
     cmd.translate([NewCoords[0]+x,NewCoords[1]+y,NewCoords[2]+z],FileName)
+
+
+
+
+
+#---------------------------------------------
+#           Input
+#---------------------------------------------
