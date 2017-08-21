@@ -59,7 +59,7 @@ def orientate():
 #-------- calculate angle for Y --------
 def angleY():
     co=getCoords("current_neighbor")
-    cmd.pseudoatom("pseudo", pos=[co[0],0,co[2]])
+    cmd.pseudoatom("newZX", pos=[co[0],0,co[2]])
     cmd.pseudoatom("pseudoX", pos=[1,0,0])
     cmd.color("yellow", "pseudoX")
     angleY = cmd.get_angle("pseudo","Halogen","pseudoX",0)
@@ -106,15 +106,6 @@ def moveInXAxis (atomName1,atomName2,FileName):
     cmd.color("white","pseudoX")
     angleX = cmd.get_angle(atomName1,atomName2,"pseudoX",0)
     cmd.rotate("z", angleX,FileName,0,1,None,"0,0,0")
-<<<<<<< HEAD
-=======
-
-
-#---------------------------------------------
-#           create grid
-#---------------------------------------------
-
->>>>>>> 49543d7d771c9bd15ea556367c8ba7ee2216cd34
 #-------Move on x-y-z-axis------------------
 def move(FileName,AtomName,x,y,z):
     NewCoords = getCoords(AtomName)
