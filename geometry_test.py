@@ -4,6 +4,31 @@ from pymol import cmd
 cmd.reinitialize()
 
 
+<<<<<<< HEAD
+#___________set Filename______________________
+#*********************************************
+#Filename1: bottom molecule
+#Filename2: halogen molecule
+Filename1="imidazol.mol2"
+Filename2="ibenz.mol2"
+#*********************************************
+
+
+
+#___________set regular grid values___________
+#*********************************************
+#length z-axis | width x-axis | height y-axis
+length=3
+width=3
+height=2
+steps=0.5
+#*********************************************
+
+#___________functions call____________________
+#*********************************************
+cmd.load(Filename1)
+cmd.load(Filename2)
+=======
 #---------------------------------------------
 #           load and select
 #---------------------------------------------
@@ -33,14 +58,22 @@ print "current_neighbor:"+str(getCoords("current_neighbor"))
 # #angle2 = cmd.get_angle("current_neighbor","Halogen","pseudoY",0)
 # cmd.rotate("z", angle2,"ibenz",0,1,None,"0,0,0")
 cmd.load("imidazol.mol2")
+>>>>>>> e7adf6a655e28c1c3c41e1247a6d4b1dc2612b3a
 pseudoAtoms()
 
-#----------rotation--------
 try:
-    orientateHalogen("ibenz")
-    orientateNitrogen("imidazol")
+    orientateHalogen(Filename2[:-5])
+    orientateNitrogen(Filename1[:-5])
+    cmd.copy("cop",Filename2[:-5])
+    rotateAll(-50,50,0,cop)
+    createGrid(length,width,height,steps,"cop")
+    rotateAll(20,0,20,cop)
+    createGrid(length,width,height,steps,"cop")
 except:
     e = sys.exc_info()[0]
+<<<<<<< HEAD
+#    print "Error: %s and message: %s" %(e,e.message)
+=======
     print "Error: %s" %e
 
 
@@ -190,3 +223,8 @@ except:
 # #-------- rotate second atom-----------
 # #rotateMatrixY("ibenz",41.82)
 # #print("nach 3. Drehen: "+str(getCoords("second_atom")))
+<<<<<<< HEAD
+=======
+# >>>>>>> c834b8b5f90e2111632581182bf5d809f2db7b73
+>>>>>>> e7adf6a655e28c1c3c41e1247a6d4b1dc2612b3a
+>>>>>>> 01c33289ff12a952cd2e2f0c68dfa35bb17287e3

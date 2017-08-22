@@ -1,6 +1,8 @@
 from pymol import cmd
 from pymol import math
+import numpy
 
+id=1
 #---------------------------------------------
 #           variablen
 #---------------------------------------------
@@ -138,20 +140,20 @@ def moveInXAxis (atomName1,atomName2,FileName):
     cmd.rotate("z", angleX,FileName,0,1,None,"0,0,0")
 
 
-
 #---------------------------------------------
 #           create grid
 #---------------------------------------------
-
-#-------Move on x-y-z-axis------------------
-def move(FileName,AtomName,x,y,z):
-    NewCoords = getCoords(AtomName)
-    cmd.translate([NewCoords[0]+x,NewCoords[1]+y,NewCoords[2]+z],FileName)
-
-
-
-
-
+def createGrid(length,width,height,steps,moleculeName):
+    for i in numpy.arange(-width/float(2),(width+steps)/float(2),steps):
+        for j in numpy.arange(-length/float(2),(length+steps)/float(2),steps):
+            cmd.copy("ID:%s_l:%sw:%s"%(id,j,i),moleculeName)
+            cmd.translate([i,height,j],"ID:%s_l:%sw:%s"%(id,j,i))
+    global id
+    id +=1
 #---------------------------------------------
-#           Input
+#           rotation for grid
 #---------------------------------------------
+def rotateAll(x,y,z,FileName):
+    cmd.rotate("x",x,FileName,0,1,None,"0,0,0")
+    cmd.rotate("y",y,FileName,0,1,None,"0,0,0")
+    cmd.rotate("z",z,FileName,0,1,None,"0,0,0")
