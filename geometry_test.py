@@ -8,7 +8,6 @@ cmd.reinitialize()
 #           load and select
 #---------------------------------------------
 cmd.load("ibenz.mol2")
-<<<<<<< HEAD
 selectHalogen()
 #-------- move in Origin-----------
 moveOrigin("Halogen","ibenz")
@@ -33,7 +32,6 @@ print "current_neighbor:"+str(getCoords("current_neighbor"))
 # angle2 = cmd.angle("bla2","current_neighbor","Halogen","pseudoY")
 # #angle2 = cmd.get_angle("current_neighbor","Halogen","pseudoY",0)
 # cmd.rotate("z", angle2,"ibenz",0,1,None,"0,0,0")
-=======
 cmd.load("imidazol.mol2")
 pseudoAtoms()
 
@@ -44,6 +42,9 @@ try:
 except:
     e = sys.exc_info()[0]
     print "Error: %s" %e
+
+
+
 #print angleY("current_neighbor")
 #print angleY("second_atom")
 #rotateY("ibenz",angleY("current_neighbor"),"current_neighbor")
@@ -56,7 +57,6 @@ except:
 #
 # #angle2 = cmd.get_angle("current_neighbor","Halogen","pseudoY",0)
 # #cmd.rotate("z", angle2,"ibenz",0,1,None,"0,0,0")
->>>>>>> e9b9b8e0c5b8903d750f2978c6ca8a789be89391
 # #cmd.rotate("x", "15","ibenz",0,1,None,"0,0,0")
 # #print "second_atom:"+str(getCoords("second_atom"))
 # #print "halogen" + str(getCoords("Halogen"))
@@ -190,4 +190,3 @@ except:
 # #-------- rotate second atom-----------
 # #rotateMatrixY("ibenz",41.82)
 # #print("nach 3. Drehen: "+str(getCoords("second_atom")))
-# >>>>>>> c834b8b5f90e2111632581182bf5d809f2db7b73
