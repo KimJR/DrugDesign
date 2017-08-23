@@ -10,6 +10,7 @@ def pseudoAtoms():
     cmd.pseudoatom("pseudoX", pos=[1,0,0])
     cmd.pseudoatom("pseudoY", pos=[0,1,0])
     cmd.pseudoatom("pseudoZ", pos=[0,0,1])
+    cmd.pseudoatom("pseudoXZ", pos=[1,0,1])
     cmd.pseudoatom("oreo", pos=[0,0,0])
     cmd.color("pink", "pseudoX")
     cmd.color("pink", "pseudoY")
@@ -66,18 +67,39 @@ def moveOrigin(AtomName,FileName):
 def orientateHalogen(FileName):
     selectHalogen()
     moveOrigin("Halogen",FileName)
-    rotateY(FileName,angleY("current_neighbor","pseudoX"),"current_neighbor")
-    rotateZ(FileName,angleZ("current_neighbor","pseudoY"),"current_neighbor")
-    rotateY(FileName,angleY("second_atom","pseudoX"),"second_atom")
+    cn=getCoords("current_neighbor")
+    if(cn[0]>0):
+        rotateY(FileName,-angleY("current_neighbor","pseudoZ"),"current_neighbor")
+    else:
+        rotateY(FileName,angleY("current_neighbor","pseudoZ"),"current_neighbor")
+
+    rotateX(FileName,-angleX("current_neighbor","pseudoY"),"current_neighbor")
+    sa=getCoords("second_atom")
+    if(sa[2]>0):
+        rotateY(FileName,angleY("second_atom","pseudoX"),"second_atom")
+    else:
+        rotateY(FileName,-angleY("second_atom","pseudoX"),"second_atom")
+
 #---------------------------------------------
 #           orientate Nitrogen
 #---------------------------------------------
 def orientateNitrogen(FileName):
     selectNitrogen()
     moveOrigin("nitrogen_N",FileName)
-    rotateY(FileName,angleY("nitrogen_NH","pseudoZ"),"nitrogen_NH")
-    rotateX(FileName,angleX("nitrogen_NH"),"nitrogen_NH")
-    rotateZ(FileName,angleZ("newC","pseudoX"),"newC")
+
+    if(getCoords("nitrogen_NH")[0]>0):
+        rotateY(FileName,-angleY("nitrogen_NH","pseudoZ"),"nitrogen_NH")
+    else:
+        rotateY(FileName,angleY("nitrogen_NH","pseudoZ"),"nitrogen_NH")
+    if(getCoords("nitrogen_NH")[1]>0):
+        rotateX(FileName,angleX("nitrogen_NH","pseudoZ"),"nitrogen_NH")
+    else:
+        rotateX(FileName,-angleX("nitrogen_NH","pseudoZ"),"nitrogen_NH")
+
+    if(getCoords("newC")[1]>0):
+        rotateZ(FileName,-cmd.get_angle("pseudoXZ","pseudoZ","newC",0),"newC")
+    else:
+        rotateZ(FileName,cmd.get_angle("pseudoXZ","pseudoZ","newC",0),"newC")
 
 #---------------------------------------------
 #           calculate angle
@@ -88,13 +110,7 @@ def angleY(MoleculeName,axis):
     name = "pseudo_%s"%(MoleculeName)
     cmd.pseudoatom(name, pos=[co[0],0,co[2]])
     angleY=cmd.get_angle(name,"oreo",axis,0)
-    if co[2]<0:
-        return(-angleY)
-    else:
-        return(angleY)
-
-
-    return(cmd.get_angle(name,"oreo",axis,0))
+    return(angleY)
 
 #-------- calculate angle for Z rotation ------
 def angleZ(MoleculeName,axis):
@@ -102,13 +118,9 @@ def angleZ(MoleculeName,axis):
     return(angleZ)
 
 #-------- calculate angle for X rotation --------
-def angleX(MoleculeName):
-    co=getCoords(MoleculeName)
-    angleX = cmd.get_angle(MoleculeName,"oreo","pseudoZ",0)
-    if co[1]<0:
-        return(-angleX)
-    else:
-        return(angleX)
+def angleX(MoleculeName,axis):
+    angleX = cmd.get_angle(MoleculeName,"oreo",axis,0)
+    return(angleX)
 
 #---------------------------------------------
 #           rotate on axis
@@ -123,11 +135,7 @@ def rotateX(FileName,angle,MoleculeName):
 
 #-------- rotate for y axis -------
 def rotateZ(FileName,angle,MoleculeName):
-    co=getCoords(MoleculeName)
-    if co[0]<0:
-        cmd.rotate("z", -angle,FileName,0,1,None,"0,0,0")
-    else:
-        cmd.rotate("z", angle,FileName,0,1,None,"0,0,0")
+    cmd.rotate("z", angle,FileName,0,1,None,"0,0,0")
 
 #---------------------------------------------
 #           orientate Nitrogen
