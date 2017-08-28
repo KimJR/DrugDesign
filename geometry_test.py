@@ -12,8 +12,6 @@ Filename1="imidazol.mol2"
 Filename2="ibenz.mol2"
 #*********************************************
 
-
-
 #___________set regular grid values___________
 #*********************************************
 #length z-axis | width x-axis | height y-axis
@@ -39,7 +37,7 @@ try:
     orientateHalogen(Filename2[:-5])
     orientateNitrogen(Filename1[:-5])
     #createGrid(grid,rotation,Filename2[:-5])
-    AutomationGrid(grid,30,Filename2[:-5])
+    automationGrid(grid,30,Filename2[:-5])
 
 
 except:

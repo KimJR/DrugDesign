@@ -3,13 +3,7 @@ from pymol import cmd
 
 cmd.reinitialize()
 
-length=5
-width=5
-height=2
-steps=0.5
-x=20
-y=0
-z=0
+
 #___________set Filename______________________
 #*********************************************
 #Filename1: bottom molecule
@@ -22,8 +16,8 @@ try:
     pseudoAtoms()
     orientateHalogen(Filename2[:-5])
     orientateNitrogen(Filename1[:-5])
-
 #*********************************************
+
 #___________set regular grid values___________
 #*********************************************
 #length z-axis | width x-axis | height y-axis
@@ -31,16 +25,17 @@ try:
 #y: rotation on y-axis
 #z: rotation on z-axis
 #set 0 if no rotation on axis is needed
-    rotation=[x,y,z]
-    rotation2=[-20,0,0]
-    rotation3=[120,50,0]
-    grid=[length,width,height,steps]
-    grid2=[length,width,-2,steps]
+length=3
+width=3
+height=2
+steps=0.5
+grid=[length,width,height,steps]
+x=20
+y=0
+z=0
+rotation=[x,y,z]
 #    createGrid(grid,rotation,Filename2[:-5])
-#    createGrid(grid,rotation2,Filename2[:-5])
-#    createGrid(grid2,rotation3,Filename2[:-5])
-    AutomationGrid(grid,rotation,Filename2[:-5],10)
-except:
-    e = sys.exc_info()[0]
-    print "Error: %s" %e
+    automationGrid(grid,30,Filename2[:-5])
+    deleteFunction()
+
 #*********************************************

@@ -148,8 +148,18 @@ def rotateAll(x,y,z,FileName):
 #---------------------------------------------
 #           create automate grid
 #---------------------------------------------
-def AutomationGrid(grid,step,moleculeName):
+def automationGrid(grid,step,moleculeName):
     for y in numpy.arange(-90,90+step,step):
         for x in numpy.arange(-60,60+step,step):
             for z in numpy.arange(-60,60+step,step):
                 createGrid(grid,[x,y,z],moleculeName)
+
+#---------------------------------------------
+#           delete function
+#---------------------------------------------
+def deleteFunction():
+    cmd.delete("pseudoX")
+    cmd.delete("pseudoY")
+    cmd.delete("pseudoZ")
+    cmd.delete("pseudoXZ")
+    cmd.delete("oreo")
