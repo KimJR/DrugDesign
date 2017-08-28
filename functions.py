@@ -100,6 +100,7 @@ def angleY(MoleculeName,axis):
     name = "pseudo_%s"%(MoleculeName)
     cmd.pseudoatom(name, pos=[co[0],0,co[2]])
     angleY=cmd.get_angle(name,"oreo",axis,0)
+    cmd.delete(name)
     return(angleY)
 #-------- calculate angle for Z rotation ------
 def angleZ(MoleculeName,axis):
@@ -163,3 +164,14 @@ def deleteFunction():
     cmd.delete("pseudoZ")
     cmd.delete("pseudoXZ")
     cmd.delete("oreo")
+    cmd.delete("second_neighbor")
+    cmd.delete("Nitrogen")
+    cmd.delete("Hydr")
+    cmd.delete("Hydr_neighbor")
+    cmd.delete("Halogen")
+    cmd.delete("current_neighbor")
+    cmd.delete("second_neighbor")
+    cmd.delete("second_atom")
+    cmd.delete("nitrogen_N")
+    cmd.delete("nitrogen_NH")
+    cmd.delete("newC")
