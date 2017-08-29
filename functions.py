@@ -1,3 +1,4 @@
+# -- coding: cp1252 --
 from pymol import cmd
 from pymol import math
 import numpy
@@ -24,7 +25,7 @@ def loadFile(FileName):
 #---------------------------------------------
 #-----select Nitrogen ring---------
 def selectNitrogen():
-    cmd.select ("Nitrogen", "e. N",1)
+    cmd.select ("Nitrogen", "e. N")
     cmd.select("Hydr", "e. H")
     cmd.select("Hydr_neighbor", "neighbor Hydr")
     cmd.select("nitrogen_NH", "Nitrogen and Hydr_neighbor")
@@ -50,7 +51,6 @@ def getCoords(AtomName):
     return coords
 #-------- move in Origin-----------
 def moveOrigin(AtomName,FileName):
-    execfile("axes.py")
     NewCoords = getCoords(AtomName)
     cmd.translate([NewCoords[0]*(-1), NewCoords[1]*(-1), NewCoords[2]*(-1)],FileName)
 #---------------------------------------------
@@ -125,14 +125,19 @@ def rotateZ(FileName,angle,MoleculeName):
 #---------------------------------------------
 #           create grid
 #---------------------------------------------
-def createGrid(grid,rotation,moleculeName):
+def createGrid(grid,rotation,moleculeName,botMol,pathToSave,fileType):
     cmd.copy("copy_%s" %id,moleculeName)
     rotateAll(rotation[0],rotation[1],rotation[2],"copy_%s" %id)
     for i in numpy.arange(-grid[1]/float(2),(grid[1]+grid[3])/float(2),grid[3]):
         for j in numpy.arange(-grid[0]/float(2),(grid[0]+grid[3])/float(2),grid[3]):
-            cmd.copy("ID:%s_x_%s_y_%s_z_%s_l:%sw:%s"%(id,rotation[0],rotation[1],rotation[2],j,i),"copy_%s" %id)
-            cmd.translate([i,grid[2],j],"ID:%s_x_%s_y_%s_z_%s_l:%sw:%s"%(id,rotation[0],rotation[1],rotation[2],j,i))
-    cmd.delete("copy_%s" %id)
+            cmd.create("ID_%s_x_%s_y_%s_z_%s_l_%sw_%s"%(id,rotation[0],rotation[1],rotation[2],j,i),"copy_%s" %id)
+            cmd.translate([i,grid[2],j],"ID_%s_x_%s_y_%s_z_%s_l_%sw_%s"%(id,rotation[0],rotation[1],rotation[2],j,i))
+            cmd.select("sID_%s_x_%s_y_%s_z_%s_l_%sw_%s"%(id,rotation[0],rotation[1],rotation[2],j,i),"ID_%s_x_%s_y_%s_z_%s_l_%sw_%s %s"%(id,rotation[0],rotation[1],rotation[2],j,i,botMol))
+            cmd.create("mID_%s_x_%s_y_%s_z_%s_l_%sw_%s"%(id,rotation[0],rotation[1],rotation[2],j,i),"sID_%s_x_%s_y_%s_z_%s_l_%sw_%s"%(id,rotation[0],rotation[1],rotation[2],j,i))
+            cmd.save("%s/_ID_%s_x_%s_y_%s_z_%s_l_%sw_%s.%s"%(pathToSave,id,rotation[0],rotation[1],rotation[2],j,i,fileType),"mID_%s_x_%s_y_%s_z_%s_l_%sw_%s"%(id,rotation[0],rotation[1],rotation[2],j,i))
+            cmd.delete("sID_%s_x_%s_y_%s_z_%s_l_%sw_%s"%(id,rotation[0],rotation[1],rotation[2],j,i))
+            cmd.delete("mID_%s_x_%s_y_%s_z_%s_l_%sw_%s"%(id,rotation[0],rotation[1],rotation[2],j,i))
+    cmd.delete("copy_%s"%id)
     global id
     id +=1
 
@@ -149,11 +154,11 @@ def rotateAll(x,y,z,FileName):
 #---------------------------------------------
 #           create automate grid
 #---------------------------------------------
-def automationGrid(grid,step,moleculeName):
+def automationGrid(grid,step,moleculeName,botMol,pathToSave,fileType):
     for y in numpy.arange(-90,90+step,step):
         for x in numpy.arange(-60,60+step,step):
             for z in numpy.arange(-60,60+step,step):
-                createGrid(grid,[x,y,z],moleculeName)
+                createGrid(grid,[x,y,z],moleculeName,botMol,pathToSave,fileType)
 
 #---------------------------------------------
 #           delete function

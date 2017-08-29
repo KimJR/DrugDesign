@@ -1,3 +1,4 @@
+# -- coding: cp1252 --
 from functions import *
 from pymol import cmd
 
@@ -22,18 +23,20 @@ try:
 #y: rotation on y-axis
 #z: rotation on z-axis
 #set 0 if no rotation on axis is needed
-    length=3
-    width=3
+    pathToSave = "/home/kim/save"
+    fileType  = "mol2"
+    length=2
+    width=2
     height=2
-    steps=0.5
+    steps=1
     grid=[length,width,height,steps]
     x=20
     y=0
     z=0
     rotation=[x,y,z]
 #    createGrid(grid,rotation,Filename2[:-5])
-#    automationGrid(grid,30,Filename2[:-5])
+    automationGrid(grid,60,Filename2[:-5],Filename1[:-5],pathToSave,fileType)
     deleteFunction()
 except:
     e = sys.exc_info()[0]
-    print "Error: %s and message: %s" %(e,e.message)
+#    print "Error: %s and message: %s" %(e,e.message)
