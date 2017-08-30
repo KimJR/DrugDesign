@@ -25,18 +25,20 @@ try:
 #set 0 if no rotation on axis is needed
     pathToSave = "/home/kim/save"
     fileType  = "mol2"
-    length=2
-    width=2
-    height=2
-    steps=1
-    grid=[length,width,height,steps]
+    length=3
+    width=3
+    height=3
+    steps=0.5
     x=20
     y=0
     z=0
-    rotation=[x,y,z]
+
+#    rotation=[x,y,z]
+    grid=[length,width,height,steps]
 #    createGrid(grid,rotation,Filename2[:-5])
-    automationGrid(grid,60,Filename2[:-5],Filename1[:-5],pathToSave,fileType)
+#    automationGrid(grid,60,Filename2[:-5],Filename1[:-5],pathToSave,fileType)
+    analyse(randomGrid(grid,Filename2[:-5],Filename1[:-5],pathToSave,fileType))
     deleteFunction()
 except:
     e = sys.exc_info()[0]
-#    print "Error: %s and message: %s" %(e,e.message)
+    print "Error: %s and message: %s" %(e,e.message)
