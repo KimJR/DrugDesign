@@ -171,7 +171,7 @@ def automationGrid(Grid,Step,MoleculeName,BotMol,PathToSave,FileType):
 
 def randomGrid(Grid,MoleculeName,BotMol,PathToSave,FileType):
 #    rand = random.randint(100,150)
-    rand = random.randint(2,30)
+    rand = random.randint(100,150)
     randX = []
     randY = []
     randZ = []
@@ -186,28 +186,59 @@ def randomGrid(Grid,MoleculeName,BotMol,PathToSave,FileType):
     return([randX,randY,randZ,rand])
 
 def analyse(values):
-    print " x: "+str(values[0])
-    print " y: "+str(values[1])
-    print " z: "+str(values[2])
-    x = numpy.arange(0,values[3])
-    m = [numpy.average(values[0]) for i in values[0]]
+#    print " x: "+str(values[0])
+#    print " y: "+str(values[1])
+#    print " z: "+str(values[2])
+    x = numpy.arange(1,values[3]+1)
+    mx = [numpy.average(values[0]) for i in values[0]]
+    m1 = [0 for i in values[0]]
     fig,ax = plt.subplots()
     plt.xlabel('number of simulations')
     plt.ylabel('rotation degree')
-    plt.title('xRotation')
+    plt.title('x rotation')
     plt.grid(True)
-    print m
+    plt.text(0.5,61,'mean = %s'%mx[0])
+    plt.xticks(numpy.arange(0,values[3]+1,20))
+    plt.yticks(numpy.arange(-65,65,5))
     ax.scatter(x,values[0],label='data',marker='o')
-    ax.plot(x,m,label='mean')
+    ax.plot(x,mx,label='mean',linestyle='--',c='red')
+    ax.plot(x,m1,label='zero',linestyle='solid',linewidth=2.5 ,c='black')
     ax.legend(loc='upper right')
     plt.savefig("xRotation.png")
-#    plt.scatter(numpy.arange(0,values[3]),values[1])
-#    plt.savefig("yRotation.png")
-#    plt.scatter(numpy.arange(0,values[3]),values[2])
-#    plt.savefig("zRotation.png")
-    print "Average x-rotation:"+str(numpy.average(values[0]))
-    print "Average y-rotation:"+str(numpy.average(values[1]))
-    print "Average z-rotation:"+str(numpy.average(values[2]))
+
+    my = [numpy.average(values[1]) for i in values[1]]
+    fig,ax = plt.subplots()
+    plt.xlabel('number of simulations')
+    plt.ylabel('rotation degree')
+    plt.title('y rotation')
+    plt.grid(True)
+    plt.text(0.5,91,'mean = %s'%my[0])
+    plt.xticks(numpy.arange(0,values[3]+1,20))
+    plt.yticks(numpy.arange(-90,90,10))
+    ax.scatter(x,values[1],label='data',marker='o')
+    ax.plot(x,my,label='mean',linestyle='--',c='red')
+    ax.plot(x,m1,label='zero',linestyle='solid',linewidth=2.5 ,c='black')
+    ax.legend(loc='upper right')
+    plt.savefig("yRotation.png")
+
+    mz = [numpy.average(values[2]) for i in values[2]]
+    fig,ax = plt.subplots()
+    plt.xlabel('number of simulations')
+    plt.ylabel('rotation degree')
+    plt.title('z rotation')
+    plt.grid(True)
+    plt.text(0.5,61,'mean = %s'%mz[0])
+    plt.xticks(numpy.arange(0,values[3]+1,20))
+    plt.yticks(numpy.arange(-65,65,5))
+    ax.scatter(x,values[2],label='data',marker='o')
+    ax.plot(x,mz,label='mean',linestyle='--',c='red')
+    ax.plot(x,m1,label='zero',linestyle='solid',linewidth=2.5 ,c='black')
+    ax.legend(loc='upper right')
+    plt.savefig("zRotation.png")
+
+#    print "Average x-rotation:"+str(numpy.average(values[0]))
+#    print "Average y-rotation:"+str(numpy.average(values[1]))
+#    print "Average z-rotation:"+str(numpy.average(values[2]))
 #    plt.show()
 
 

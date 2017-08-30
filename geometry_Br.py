@@ -23,7 +23,7 @@ try:
 #y: rotation on y-axis
 #z: rotation on z-axis
 #set 0 if no rotation on axis is needed
-    pathToSave = "/home/kim/save"
+    pathToSave = "/home/sergii/save"
     fileType  = "mol2"
     length=3
     width=3
