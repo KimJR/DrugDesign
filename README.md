@@ -21,8 +21,8 @@ PyMOL is a user-sponsored molecular visualization system on an open-source found
 
 ### Input Parameters
 ```
-Filename1 = "file1.mol2" 
-Filename2 = "file2.mol2"
+Filename1 = "/Mol2/file1.mol2" 
+Filename2 = "/Mol2/file2.mol2"
 pathToSave = "/Results"
 fileType  = "mol2"
 ```
