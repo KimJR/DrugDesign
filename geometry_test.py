@@ -8,8 +8,8 @@ cmd.reinitialize()
 #*********************************************
 #Filename1: bottom molecule
 #Filename2: halogen molecule
-Filename1="imidazol.mol2"
-Filename2="ibenz.mol2"
+Filename1="Mol2/imidazol.mol2"
+Filename2="Mol2/ibenz.mol2"
 #*********************************************
 
 #___________set regular grid values___________
