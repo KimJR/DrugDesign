@@ -3,7 +3,7 @@
 **Lab for Molecular Design & Pharmaceutical Biophysics**  
 **Institute of Pharmaceutical Sciences in the group of**  
 
-This repository contains the work of my internship in 2017 as part of my undergraduate studies in Bioinformatics at the University of Tübingen, Germany supervised by Dr. Markus Zimmermann. 
+This repository contains the work of my internship in 2017 as part of my undergraduate studies in Bioinformatics at the University of Tübingen, Germany.
 
 - - - - - - - - - -
 
