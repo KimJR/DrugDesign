@@ -9,8 +9,11 @@ This repository contains the work of my internship in 2017 as part of my undergr
 
 ## Content
 The script is a Python script written for the **PyMOL by Schrödinger** program. The script expects 2 files of the type mol2, a halogen and a nitrogen as input. In the first step, these two molecules are rotated and aligned around the axes x, y and z by selecting individual atoms. A copy of the halogen is then created and a grid is later created from this copy. The halogen is copied again several times and placed at the grid points. 
-<img src="/Results/Grid.png" alt="Drawing" width="10"/>
-These grid points can be entered manually or generated randomly. Then the coordinates and points of the halogen copies are saved in a.mol2 file. For the randomized grid generation, a statistical evaluation of the angles of rotation around the axes is also shown in a plot in order to see the distribution
+These grid points can be entered manually or generated randomly.  
+
+<img src="/Results/Grid.png" alt="Drawing" width="100"/>
+
+Then the coordinates and points of the halogen copies are saved in a.mol2 file. For the randomized grid generation, a statistical evaluation of the angles of rotation around the axes is also shown in a plot in order to see the distribution
 
 ### PyMOL
 https://pymol.org/2/  
