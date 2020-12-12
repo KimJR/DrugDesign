@@ -1,19 +1,53 @@
-# -- coding: cp1252 --
 from pymol import cmd
 from pymol import math
 import numpy
 import random
 import matplotlib
 import matplotlib.pyplot as plt
-#matplotlib.use('TkAgg')
-#from matplotlib.backends import backend_tkagg
-#matplotlib.get_backend()
-#'Qt4Agg'
+id=1 #name id
 
-id=1
-#---------------------------------------------
-#           variablen
-#---------------------------------------------
+
+#***********************************************************************
+#           helper functions
+#***********************************************************************
+
+#___________call functions______________________________________________
+#Funktionsaufrufe
+def choose(Filename1,Filename2,grid,rotation,pathToSave,fileType, angleSteps,choice):
+    loadFiles(Filename1,Filename2)
+    if choice==1:
+        createGrid(grid,rotation,Filename2[:-5],Filename1[:-5],pathToSave,fileType)
+    if choice==2:
+        automationGrid(grid,angleSteps,Filename2[:-5],Filename1[:-5],pathToSave,fileType)
+    if choice==3:
+        analyse(randomGrid(grid,Filename2[:-5],Filename1[:-5],pathToSave,fileType))
+
+    deleteFunction()
+
+#___________load Files__________________________________________________
+def loadFiles(FileName1,FileName2):
+    cmd.reinitialize()
+    cmd.load(FileName1)
+    cmd.load(FileName2)
+    pseudoAtoms()
+    orientateHalogen(FileName2[:-5])
+    orientateNitrogen(FileName1[:-5])
+
+
+#___________get coords from atoms_______________________________________
+def getCoords(AtomName):
+    model = cmd.get_model(AtomName)
+    coords = []
+    for atom in model.atom:
+        coords = atom.coord
+    return coords
+
+#___________move in origin______________________________________________
+def moveOrigin(AtomName,FileName):
+    NewCoords = getCoords(AtomName)
+    cmd.translate([NewCoords[0]*(-1), NewCoords[1]*(-1), NewCoords[2]*(-1)],FileName)
+
+#___________define pseudoatoms__________________________________________
 def pseudoAtoms():
     cmd.pseudoatom("pseudoX", pos=[1,0,0])
     cmd.pseudoatom("pseudoY", pos=[0,1,0])
@@ -23,14 +57,33 @@ def pseudoAtoms():
     cmd.color("pink", "pseudoX")
     cmd.color("pink", "pseudoY")
     cmd.color("pink", "pseudoZ")
-#------Load File------------------
-def loadFile(FileName):
-    cmd.reinitialize()
-    cmd.load(FileName)
-#---------------------------------------------
-#           selections
-#---------------------------------------------
-#-----select Nitrogen ring---------
+
+#___________delete all unnecessary_______________________________________
+def deleteFunction():
+    cmd.delete("pseudoX")
+    cmd.delete("pseudoY")
+    cmd.delete("pseudoZ")
+    cmd.delete("pseudoXZ")
+    cmd.delete("Oreo")
+    cmd.delete("SecondNeighbor")
+    cmd.delete("Nitrogen")
+    cmd.delete("Hydr")
+    cmd.delete("HydrNeighbor")
+    cmd.delete("Halogen")
+    cmd.delete("FirstNeighbor")
+    cmd.delete("SecondNeighbor")
+    cmd.delete("SecondAtom")
+    cmd.delete("NitrogenN")
+    cmd.delete("NitrogenNH")
+    cmd.delete("CAtom")
+
+
+
+#***********************************************************************
+#           selection and orientation functions
+#***********************************************************************
+
+#___________selection of Nitrogen_______________________________________
 def selectNitrogen():
     cmd.select ("Nitrogen", "e. N")
     cmd.select("Hydr", "e. H")
@@ -38,7 +91,8 @@ def selectNitrogen():
     cmd.select("NitrogenNH", "Nitrogen and HydrNeighbor")
     cmd.select("NitrogenN", "Nitrogen and not NitrogenNH")
     cmd.select("CAtom", "(neighbor NitrogenN) and (neighbor NitrogenNH) ")
-#-----select Halogen --------------
+
+#___________selection of Halogen________________________________________
 def selectHalogen():
     cmd.select("Halogen", "e. Cl or e. Br or e. I")
     cmd.select("FirstNeighbor", "neighbor Halogen")
@@ -46,23 +100,8 @@ def selectHalogen():
     model_neighbor=cmd.get_model("SecondNeighbor")
     for atom in model_neighbor.atom:
         cmd.select("SecondAtom", "id %s and ibenz"%(atom.id))
-#---------------------------------------------
-#           orientate
-#---------------------------------------------
-#------get Coords from Atoms--------
-def getCoords(AtomName):
-    model = cmd.get_model(AtomName)
-    coords = []
-    for atom in model.atom:
-        coords = atom.coord
-    return coords
-#-------- move in Origin-----------
-def moveOrigin(AtomName,FileName):
-    NewCoords = getCoords(AtomName)
-    cmd.translate([NewCoords[0]*(-1), NewCoords[1]*(-1), NewCoords[2]*(-1)],FileName)
-#---------------------------------------------
-#           orientate Halogen
-#---------------------------------------------
+
+#___________orientate Halogen___________________________________________
 def orientateHalogen(FileName):
     selectHalogen()
     moveOrigin("Halogen",FileName)
@@ -78,9 +117,8 @@ def orientateHalogen(FileName):
         rotateY(FileName,angleY("SecondAtom","pseudoX"),"SecondAtom")
     else:
         rotateY(FileName,-angleY("SecondAtom","pseudoX"),"SecondAtom")
-#---------------------------------------------
-#           orientate Nitrogen
-#---------------------------------------------
+
+#___________orientate Nitrogen__________________________________________
 def orientateNitrogen(FileName):
     selectNitrogen()
     moveOrigin("NitrogenN",FileName)
@@ -95,13 +133,11 @@ def orientateNitrogen(FileName):
         rotateX(FileName,-angleX("NitrogenNH","pseudoZ"),"NitrogenNH")
 
     if(getCoords("CAtom")[1]>0):
-        rotateZ(FileName,-cmd.get_angle("pseudoXZ","pseudoZ","CAtom",0),"CAtom")
+        rotateZ(FileName,-angleZ("CAtom","pseudoZ"),"CAtom")
     else:
-        rotateZ(FileName,cmd.get_angle("pseudoXZ","pseudoZ","CAtom",0),"CAtom")
-#---------------------------------------------
-#           calculate angle
-#---------------------------------------------
-#-------- calculate angle for Y Rotation -----
+        rotateZ(FileName,angleZ("CAtom","pseudoZ"),"CAtom")
+
+#___________calculate angle for y-rotation______________________________
 def angleY(MoleculeName,Axis):
     co=getCoords(MoleculeName)
     name = "pseudo_%s"%(MoleculeName)
@@ -109,29 +145,32 @@ def angleY(MoleculeName,Axis):
     angleY=cmd.get_angle(name,"Oreo",Axis,0)
     cmd.delete(name)
     return(angleY)
-#-------- calculate angle for Z Rotation ------
+#___________calculate angle for z-rotation______________________________
 def angleZ(MoleculeName,Axis):
-    angleZ = cmd.get_angle(MoleculeName,"Oreo",Axis,0)
+    angleZ = cmd.get_angle("pseudoXZ",Axis,MoleculeName,0)
     return(angleZ)
-#-------- calculate angle for X Rotation --------
+#___________calculate angle for x-rotation______________________________
 def angleX(MoleculeName,Axis):
     angleX = cmd.get_angle(MoleculeName,"Oreo",Axis,0)
     return(angleX)
-#---------------------------------------------
-#           rotate on axis
-#---------------------------------------------
-#--------rotate on y axis -------
+
+#___________rotate on y-axis____________________________________________
 def rotateY(FileName,Angle,MoleculeName):
     cmd.rotate("y",Angle,FileName,0,1,None,"0,0,0")
-#-------- rotate for x axis -------
+#___________rotate on x-axis____________________________________________
 def rotateX(FileName,Angle,MoleculeName):
     cmd.rotate("x",Angle,FileName,0,1,None,"0,0,0")
-#-------- rotate for y axis -------
+#___________rotate on z-axis____________________________________________
 def rotateZ(FileName,Angle,MoleculeName):
     cmd.rotate("z", Angle,FileName,0,1,None,"0,0,0")
-#---------------------------------------------
-#           create grid
-#---------------------------------------------
+
+
+
+#***********************************************************************
+#           Grid functions
+#***********************************************************************
+
+#___________create Grid_________________________________________________
 def createGrid(Grid,Rotation,MoleculeName,BotMol,PathToSave,FileType):
     cmd.copy("copy_%s" %id,MoleculeName)
     rotateAll(Rotation[0],Rotation[1],Rotation[2],"copy_%s" %id)
@@ -148,30 +187,22 @@ def createGrid(Grid,Rotation,MoleculeName,BotMol,PathToSave,FileType):
     global id
     id +=1
 
-#---------------------------------------------
-#           Rotation for grid
-#---------------------------------------------
+#___________rotation for Grid___________________________________________
 def rotateAll(x,y,z,FileName):
     cmd.rotate("z",z,FileName,0,1,None,"0,0,0")
     cmd.rotate("x",x,FileName,0,1,None,"0,0,0")
     cmd.rotate("y",y,FileName,0,1,None,"0,0,0")
 
-#---------------------------------------------
-#           create automate grid
-#---------------------------------------------
-def automationGrid(Grid,Step,MoleculeName,BotMol,PathToSave,FileType):
-    for y in numpy.arange(-90,90+Step,Step):
-        for x in numpy.arange(-60,60+Step,Step):
-            for z in numpy.arange(-60,60+Step,Step):
+#___________generate automation Grid_____________________________________
+def automationGrid(Grid,angleStep,MoleculeName,BotMol,PathToSave,FileType):
+    for y in numpy.arange(-90,90+angleStep,angleStep):
+        for x in numpy.arange(-60,60+angleStep,angleStep):
+            for z in numpy.arange(-60,60+angleStep,angleStep):
                 createGrid(Grid,[x,y,z],MoleculeName,BotMol,PathToSave,FileType)
 
-#---------------------------------------------
-#           random automate grid
-#---------------------------------------------
-
+#___________generate random Grid_________________________________________
 def randomGrid(Grid,MoleculeName,BotMol,PathToSave,FileType):
-#    rand = random.randint(100,150)
-    rand = random.randint(100,150)
+    rand = random.randint(10,20)
     randX = []
     randY = []
     randZ = []
@@ -185,10 +216,8 @@ def randomGrid(Grid,MoleculeName,BotMol,PathToSave,FileType):
         randZ.extend([z])
     return([randX,randY,randZ,rand])
 
+#___________generate analyse for random Grid_____________________________
 def analyse(values):
-#    print " x: "+str(values[0])
-#    print " y: "+str(values[1])
-#    print " z: "+str(values[2])
     x = numpy.arange(1,values[3]+1)
     mx = [numpy.average(values[0]) for i in values[0]]
     m1 = [0 for i in values[0]]
@@ -235,53 +264,3 @@ def analyse(values):
     ax.plot(x,m1,label='zero',linestyle='solid',linewidth=2.5 ,c='black')
     ax.legend(loc='upper right')
     plt.savefig("zRotation.png")
-
-#    print "Average x-rotation:"+str(numpy.average(values[0]))
-#    print "Average y-rotation:"+str(numpy.average(values[1]))
-#    print "Average z-rotation:"+str(numpy.average(values[2]))
-#    plt.show()
-
-
-
-
-# def _new_figure_manager(num, *args, **kwargs):
-#     if pymol._ext_gui is None:
-#         return new_figure_manager(num, *args, **kwargs)
-#     backend_tkagg.show._needmain = False
-#     import Tkinter as Tk
-#     from matplotlib.figure import Figure
-#     from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, FigureManagerTkAgg
-#     FigureClass = kwargs.pop('FigureClass', Figure)
-#     print kwargs
-#     figure = FigureClass(*args, **kwargs)
-#     window = Tk.Toplevel(master=pymol._ext_gui.root)
-#     canvas = FigureCanvasTkAgg(figure, master=window)
-#     figManager = FigureManagerTkAgg(canvas, num, window)
-#     if matplotlib.is_interactive():
-#         figManager.show()
-#     return figManager
-#     new_figure_manager = backend_tkagg.new_figure_manager
-#     backend_tkagg.new_figure_manager = _new_figure_manager
-
-
-
-#---------------------------------------------
-#           delete function
-#---------------------------------------------
-def deleteFunction():
-    cmd.delete("pseudoX")
-    cmd.delete("pseudoY")
-    cmd.delete("pseudoZ")
-    cmd.delete("pseudoXZ")
-    cmd.delete("Oreo")
-    cmd.delete("SecondNeighbor")
-    cmd.delete("Nitrogen")
-    cmd.delete("Hydr")
-    cmd.delete("HydrNeighbor")
-    cmd.delete("Halogen")
-    cmd.delete("FirstNeighbor")
-    cmd.delete("SecondNeighbor")
-    cmd.delete("SecondAtom")
-    cmd.delete("NitrogenN")
-    cmd.delete("NitrogenNH")
-    cmd.delete("CAtom")
